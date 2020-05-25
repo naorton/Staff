@@ -1,28 +1,16 @@
-import FaBo9Axis_MPU9250
-import time
-import sys
+import utime
+from machine import I2C, Pin
+from mpu9250 import MPU9250
 
-mpu9250 = FaBo9Axis_MPU9250.MPU9250()
+i2c = I2C(scl=Pin(22), sda=Pin(21))
+sensor = MPU9250(i2c)
 
-try:
-    while True:
-        accel = mpu9250.readAccel()
-        print(" ax = " , ( accel['x'] ))
-        print(" ay = " , ( accel['y'] ))
-        print(" az = " , ( accel['z'] ))
+print("MPU9250 id: " + hex(sensor.whoami))
 
-        gyro = mpu9250.readGyro()
-        print(" gx = " , ( gyro['x'] ))
-        print(" gy = " , ( gyro['y'] ))
-        print(" gz = " , ( gyro['z'] ))
+while True:
+    print(sensor.acceleration)
+    print(sensor.gyro)
+    print(sensor.magnetic)
+    print(sensor.temperature)
 
-        mag = mpu9250.readMagnet()
-        print(" mx = " , ( mag['x'] ))
-        print(" my = " , ( mag['y'] ))
-        print(" mz = " , ( mag['z'] ))
-        print()
-
-        time.sleep(0.5)
-
-except KeyboardInterrupt:
-    sys.exit()
+    utime.sleep_ms(1000)
