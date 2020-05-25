@@ -1,21 +1,28 @@
-# MPU6050 9-DoF Example Printout
+import FaBo9Axis_MPU9250
+import time
+import sys
 
-from mpu9250_i2c import *
+mpu9250 = FaBo9Axis_MPU9250.MPU9250()
 
-time.sleep(1) # delay necessary to allow mpu9250 to settle
+try:
+    while True:
+        accel = mpu9250.readAccel()
+        print(" ax = " , ( accel['x'] ))
+        print(" ay = " , ( accel['y'] ))
+        print(" az = " , ( accel['z'] ))
 
-print('recording data')
-while 1:
-    try:
-        ax,ay,az,wx,wy,wz,temp = mpu6050_conv() # read and convert mpu6050 data
-        mx,my,mz = AK8963_conv() # read and convert AK8963 magnetometer data
-    except:
-        continue
-    
-    print('{}'.format('-'*30))
-    print('accel [g]: x = , y = , z = '.format(ax,ay,az))
-    print('gyro [dps]:  x = , y = , z = '.format(wx,wy,wz))
-    print('mag [uT]:   x = , y = , z = '.format(mx,my,mz))
-    print('{}'.format('-'*30))
-    print('temp: ' + temp)
-    time.sleep(1)
+        gyro = mpu9250.readGyro()
+        print(" gx = " , ( gyro['x'] ))
+        print(" gy = " , ( gyro['y'] ))
+        print(" gz = " , ( gyro['z'] ))
+
+        mag = mpu9250.readMagnet()
+        print(" mx = " , ( mag['x'] ))
+        print(" my = " , ( mag['y'] ))
+        print(" mz = " , ( mag['z'] ))
+        print()
+
+        time.sleep(0.5)
+
+except KeyboardInterrupt:
+    sys.exit()
